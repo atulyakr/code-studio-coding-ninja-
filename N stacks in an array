@@ -1,0 +1,75 @@
+//problem link: https://www.codingninjas.com/codestudio/problems/n-stacks-in-an-array_1164271
+
+//detailed solution link: https://www.youtube.com/watch?v=lrSXKLmnMV8
+
+class NStack
+{
+    int *arr;
+    int *next;
+    int *top;
+    int freespot;
+public:
+    // Initialize your data structure.
+    NStack(int N, int S)
+    {
+        arr=new int[S];
+        next=new int[S];
+        top=new int[N];
+        freespot=0;
+        
+        for(int i =0;i<S;i++)
+        {
+            next[i]=i+1;
+        }
+        next[S-1]=-1;  //kyunki last index ke aage koi freepot hai hi nhi !
+        for(int i =0;i<N;i++)
+        {
+            top[i]=-1;
+        }
+    }
+
+    // Pushes 'X' into the Mth stack. Returns true if it gets pushed into the stack, and false otherwise.
+    bool push(int x, int m)
+    {
+        if(freespot==-1)
+        {
+            return false;
+        }
+        
+        //kaha push kare vo to pata ho
+       int index=freespot;
+        
+       //ab push kar  dete h;
+        arr[index]=x;
+ 
+        //freespot ko update kr diya jaaye
+        freespot=next[index];
+        
+        //next array ko update kr dete h
+       next[index]=top[m-1]; //jb element stack me push ho jata h ye  stack ke top ke pehle wala elemenrt represent krta h(mtlb purane wala top); 
+       
+        //top array ko update kr diya jaaye?
+        top[m-1]=index;
+        
+        return true;
+    }
+
+    // Pops top element from Mth Stack. Returns -1 if the stack is empty, otherwise returns the popped element.
+    int pop(int m)
+    {
+       if(top[m-1]==-1)
+       {
+           return -1;
+       }    
+       
+        int index=top[m-1];
+        
+        top[m-1]=next[index];
+        
+        next[index]=freespot;
+        
+        freespot=index;
+        
+        return arr[index];
+    }
+};
